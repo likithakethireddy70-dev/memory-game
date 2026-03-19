@@ -2,6 +2,21 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { buildDeck, calcScore, LEVELS } from '../utils/gameUtils';
 
 const FLIP_BACK_DELAY = 900; // ms before unmatched cards flip back
+const LS_KEY = 'memoryGame_bestScores'; // localStorage key
+
+/** Read best scores object { easy: 0, medium: 0, hard: 0 } from localStorage */
+function loadBestScores() {
+  try {
+    return JSON.parse(localStorage.getItem(LS_KEY)) || {};
+  } catch {
+    return {};
+  }
+}
+
+/** Persist best scores to localStorage */
+function saveBestScores(scores) {
+  localStorage.setItem(LS_KEY, JSON.stringify(scores));
+}
 
 export default function useGame() {
   const [level, setLevel]         = useState(null);       // 'easy' | 'medium' | 'hard'
@@ -13,8 +28,12 @@ export default function useGame() {
   const [status, setStatus]       = useState('idle');     // idle | playing | finished
   const [score, setScore]         = useState(0);
   const [locked, setLocked]       = useState(false);      // prevent clicks during check
+  const [hintIndex, setHintIndex] = useState(null);       // index of hinted card
+  const [bestScores, setBestScores] = useState(loadBestScores); // { easy, medium, hard }
+  const [isNewBest, setIsNewBest]   = useState(false);    // did player beat their record?
 
   const timerRef = useRef(null);
+  const hintTimerRef = useRef(null);
 
   // ── Timer ──────────────────────────────────────────────────────────────────
   const startTimer = useCallback(() => {
@@ -30,8 +49,14 @@ export default function useGame() {
   useEffect(() => () => stopTimer(), [stopTimer]);
 
   // ── Start / Restart ────────────────────────────────────────────────────────
+  const clearHint = useCallback(() => {
+    clearTimeout(hintTimerRef.current);
+    setHintIndex(null);
+  }, []);
+
   const startGame = useCallback((lvl) => {
     stopTimer();
+    clearHint();
     const { cols, rows } = LEVELS[lvl];
     setLevel(lvl);
     setCards(buildDeck(cols, rows));
@@ -40,16 +65,18 @@ export default function useGame() {
     setMoves(0);
     setSeconds(0);
     setScore(0);
+    setIsNewBest(false);
     setStatus('playing');
     setLocked(false);
     timerRef.current = null;
-  }, [stopTimer]);
+  }, [stopTimer, clearHint]);
 
   const goToMenu = useCallback(() => {
     stopTimer();
+    clearHint();
     setStatus('idle');
     setLevel(null);
-  }, [stopTimer]);
+  }, [stopTimer, clearHint]);
 
   // ── Card click ─────────────────────────────────────────────────────────────
   const flipCard = useCallback((index) => {
@@ -57,6 +84,8 @@ export default function useGame() {
     if (cards[index].isMatched) return;
     if (selected.includes(index)) return;
     if (selected.length === 2) return;
+
+    clearHint(); // dismiss hint on any card click
 
     // Start timer on first flip
     if (status === 'playing' && seconds === 0 && selected.length === 0) {
@@ -96,6 +125,19 @@ export default function useGame() {
           const finalScore = calcScore(moves + 1, seconds, (cols * rows) / 2);
           setScore(finalScore);
           setStatus('finished');
+
+          // Update best score for this level if improved
+          setBestScores((prev) => {
+            const prevBest = prev[level] || 0;
+            if (finalScore > prevBest) {
+              setIsNewBest(true);
+              const updated = { ...prev, [level]: finalScore };
+              saveBestScores(updated);
+              return updated;
+            }
+            setIsNewBest(false);
+            return prev;
+          });
         }
       } else {
         // ❌ No match — flip back after delay
@@ -111,11 +153,41 @@ export default function useGame() {
         }, FLIP_BACK_DELAY);
       }
     }
-  }, [locked, cards, selected, matched, moves, seconds, status, level, startTimer, stopTimer]);
+  }, [locked, cards, selected, matched, moves, seconds, status, level, startTimer, stopTimer, clearHint]);
+
+  // ── AI Hint ────────────────────────────────────────────────────────────────
+  const getHint = useCallback(() => {
+    if (locked || status !== 'playing') return;
+    clearHint();
+
+    // Case 1: one card already flipped — find its unflipped, unmatched pair
+    if (selected.length === 1) {
+      const flippedEmoji = cards[selected[0]].emoji;
+      const match = cards.findIndex(
+        (c, i) => c.emoji === flippedEmoji && !c.isMatched && !c.isFlipped && i !== selected[0]
+      );
+      if (match !== -1) {
+        setHintIndex(match);
+        hintTimerRef.current = setTimeout(() => setHintIndex(null), 2000);
+        return;
+      }
+    }
+
+    // Case 2: suggest a random unflipped, unmatched card
+    const candidates = cards
+      .map((c, i) => ({ ...c, index: i }))
+      .filter((c) => !c.isMatched && !c.isFlipped);
+
+    if (candidates.length === 0) return;
+    const pick = candidates[Math.floor(Math.random() * candidates.length)];
+    setHintIndex(pick.index);
+    hintTimerRef.current = setTimeout(() => setHintIndex(null), 2000);
+  }, [locked, status, selected, cards, clearHint]);
 
   return {
     level, cards, selected, matched,
     moves, seconds, status, score, locked,
-    flipCard, startGame, goToMenu,
+    hintIndex, bestScores, isNewBest,
+    flipCard, startGame, goToMenu, getHint,
   };
 }

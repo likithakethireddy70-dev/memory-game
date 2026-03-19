@@ -3,7 +3,7 @@ import Card from './Card';
 import { LEVELS } from '../utils/gameUtils';
 import styles from './GameBoard.module.css';
 
-export default function GameBoard({ cards, onFlip, level }) {
+export default function GameBoard({ cards, onFlip, level, hintIndex }) {
   const { cols } = LEVELS[level];
 
   return (
@@ -21,6 +21,7 @@ export default function GameBoard({ cards, onFlip, level }) {
             emoji={card.emoji}
             isFlipped={card.isFlipped}
             isMatched={card.isMatched}
+            isHint={index === hintIndex}
             onClick={() => onFlip(index)}
           />
         ))}

@@ -30,22 +30,6 @@
   to   { transform: translateY(0) scale(1); opacity: 1; }
 }
 
-/* Confetti particles */
-.confetti {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
-  top: -10px;
-  left: calc(var(--i) * 8.5%);
-  background: hsl(calc(var(--i) * 30), 80%, 60%);
-  animation: fall calc(1.5s + var(--i) * 0.1s) ease-in calc(var(--i) * 0.08s) both;
-}
-@keyframes fall {
-  from { transform: translateY(0) rotate(0deg); opacity: 1; }
-  to   { transform: translateY(120px) rotate(360deg); opacity: 0; }
-}
-
 /* Rank badge */
 .rankBadge {
   width: 72px;
@@ -121,6 +105,26 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-variant-numeric: tabular-nums;
+}
+.newBest {
+  display: inline-block;
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  color: #0a0e1a;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  margin-top: 0.25rem;
+  animation: badgePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+}
+@keyframes badgePop {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.prevBest {
+  font-size: 0.78rem;
+  color: var(--text2);
+  margin-top: 0.2rem;
 }
 
 /* Actions */

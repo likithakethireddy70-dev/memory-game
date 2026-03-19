@@ -54,7 +54,7 @@ export function formatTime(seconds) {
 }
 
 export const LEVELS = {
-  easy:   { label: 'Easy',   cols: 4, rows: 4, emoji: '🌱' },
-  medium: { label: 'Medium', cols: 6, rows: 6, emoji: '🔥' },
-  hard:   { label: 'Hard',   cols: 8, rows: 8, emoji: '💀' },
+  easy:   { label: 'Easy',   cols: 4, rows: 4 },
+  medium: { label: 'Medium', cols: 6, rows: 6 },
+  hard:   { label: 'Hard',   cols: 8, rows: 8 },
 };

@@ -41,7 +41,13 @@
 
 /* Hero */
 .hero { text-align: center; }
-.iconRow { font-size: 3.5rem; margin-bottom: 0.75rem; animation: float 3s ease-in-out infinite; }
+.logoMark {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 1rem;
+  animation: float 3s ease-in-out infinite;
+}
+.logoMark svg { width: 100%; height: 100%; }
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
@@ -98,7 +104,14 @@
 .card:hover::before { opacity: 0.08; }
 .card:active { transform: translateY(-2px); }
 
-.cardEmoji { font-size: 2.25rem; position: relative; z-index: 1; }
+.cardIcon {
+  width: 36px;
+  height: 36px;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+.cardIcon svg { width: 100%; height: 100%; }
 .cardLabel {
   font-size: 1.1rem;
   font-weight: 700;

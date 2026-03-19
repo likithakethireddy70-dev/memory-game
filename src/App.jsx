@@ -24,11 +24,14 @@ export default function App() {
             total={game.cards.length / 2}
             onRestart={() => game.startGame(game.level)}
             onMenu={game.goToMenu}
+            onHint={game.getHint}
+            bestScore={game.bestScores[game.level] || 0}
           />
           <GameBoard
             cards={game.cards}
             onFlip={game.flipCard}
             level={game.level}
+            hintIndex={game.hintIndex}
           />
         </>
       )}
@@ -41,6 +44,8 @@ export default function App() {
           level={game.level}
           onPlayAgain={() => game.startGame(game.level)}
           onChangeLevel={game.goToMenu}
+          isNewBest={game.isNewBest}
+          bestScore={game.bestScores[game.level] || 0}
         />
       )}
     </div>

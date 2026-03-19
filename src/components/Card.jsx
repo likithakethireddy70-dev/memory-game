@@ -5,10 +5,10 @@ import styles from './Card.module.css';
  * Single memory card with CSS 3D flip animation.
  * Props: emoji, isFlipped, isMatched, onClick
  */
-export default function Card({ emoji, isFlipped, isMatched, onClick }) {
+export default function Card({ emoji, isFlipped, isMatched, isHint, onClick }) {
   return (
     <div
-      className={`${styles.scene} ${isMatched ? styles.matched : ''}`}
+      className={`${styles.scene} ${isMatched ? styles.matched : ''} ${isHint ? styles.hint : ''}`}
       onClick={onClick}
       role="button"
       aria-label={isFlipped || isMatched ? emoji : 'Hidden card'}
