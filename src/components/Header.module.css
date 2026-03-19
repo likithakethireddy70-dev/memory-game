@@ -1,0 +1,86 @@
+.header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Left */
+.left { display: flex; align-items: center; gap: 0.75rem; }
+.brand { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+.levelBadge {
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.3);
+  color: #a78bfa;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Stats */
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.5rem 1.25rem;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  min-width: 52px;
+}
+.statIcon { font-size: 0.9rem; }
+.statVal { font-size: 1rem; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.statLabel { font-size: 0.65rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; }
+.divider { width: 1px; height: 32px; background: var(--border); }
+
+/* Right */
+.right { display: flex; gap: 0.5rem; }
+.btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(99,102,241,0.1); }
+.menuBtn:hover { border-color: var(--text2); color: var(--text); background: var(--bg3); }
+
+/* Progress bar */
+.progressTrack {
+  height: 3px;
+  background: var(--bg3);
+}
+.progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  transition: width 0.5s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+@media (max-width: 600px) {
+  .inner { padding: 0.6rem 1rem; }
+  .stats { padding: 0.4rem 0.75rem; gap: 0.5rem; }
+  .statVal { font-size: 0.9rem; }
+  .brand { display: none; }
+}
