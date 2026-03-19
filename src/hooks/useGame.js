@@ -189,6 +189,7 @@ export default function useGame() {
     level, cards, selected, matched,
     moves, seconds, status, score, locked,
     hintIndex, bestScores, isNewBest,
+    bestScore: bestScores[level] || 0,   // convenience: current level's best
     flipCard, startGame, goToMenu, getHint,
   };
 }

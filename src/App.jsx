@@ -25,7 +25,7 @@ export default function App() {
             onRestart={() => game.startGame(game.level)}
             onMenu={game.goToMenu}
             onHint={game.getHint}
-            bestScore={game.bestScores[game.level] || 0}
+            bestScore={game.bestScore}
           />
           <GameBoard
             cards={game.cards}
@@ -45,7 +45,7 @@ export default function App() {
           onPlayAgain={() => game.startGame(game.level)}
           onChangeLevel={game.goToMenu}
           isNewBest={game.isNewBest}
-          bestScore={game.bestScores[game.level] || 0}
+          bestScore={game.bestScore}
         />
       )}
     </div>
