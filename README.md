@@ -1,7 +1,5 @@
 #                                                                   MEMORY MATCHING GAME
 
-# Memory Matching Game
-
 ## Overview
 This project is a browser-based Memory Matching Game developed using JavaScript. The game challenges users to flip cards and find matching pairs while tracking their performance.
 
