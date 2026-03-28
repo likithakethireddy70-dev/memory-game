@@ -1,4 +1,4 @@
-# ================= MEMORY MATCHING GAME =================
+#                                                                   MEMORY MATCHING GAME
 
 # Memory Matching Game
 
